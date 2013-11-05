@@ -1,0 +1,29 @@
+README FILE
+
+CS4780 ASSIGNMENT4
+
+Feiran Chen, fc254
+Yimin Wang, yw475
+-------------------------------------------
+Problem1
+p1.py
+
+Environment requirement:
+python 2.6+
+SVMlight package
+
+Output files:
+Only self-explanatory Screen output
+
+-------------------------------------------
+Problem3
+p3.py
+
+Environment requirement:
+python 2.6+
+numpy package
+
+Output files:
+Only self-explanatory Screen output
+-------------------------------------------
+

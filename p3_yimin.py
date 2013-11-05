@@ -1,4 +1,4 @@
-import scipy.sparse as sp
+import scipy as sp
 from math import *
 
 
@@ -39,13 +39,14 @@ for i in [0,1]:
   for wd in range(wordcount):
     word[i][wd]=log(1+word[i][wd])-log(wordcount+clword[i])
 print "log"
-conpro=sp.coo_matrix(word)
-artwd=[]
+conneg=sp.array(word[0])
+conpro=sp.array(word[1])
 artcl=[]
+predict=[]
 index=0
 with open("arxiv/arxiv.test") as f:
   for line in f:
-    artwd.append([0]*wordcount)
+    artwd=[0]*wordcount
     sep=line.partition(' ')
     line=sep[2]
     c=(int(sep[0]))
@@ -57,22 +58,22 @@ with open("arxiv/arxiv.test") as f:
       line=sep[-1]
       sep=line.partition(' ')
       occur=int(sep[0])
-      artwd[index][wordid]=occur
+      artwd[wordid]=occur
       line=sep[-1]
+    testdoc=sp.array(artwd)
+    pv=sp.dot(conpro,testdoc.transpose())
+    nv=sp.dot(conneg,testdoc.transpose())
+    predict.append([nv,pv])
     index+=1
-    print index
 print "input done"
-
-testdoc=sp.coo_matrix(artwd)
-predict=testdoc*(conpro.transpose())
 
 #partA
 tp=0
 fpos=0
 fneg=0
 for i in range(index):
-  neg=predict[i][0]+log(cl[0]/(cl[0]+cl[1]))
-  pos=predict[i][1]+log(cl[1]/(cl[0]+cl[1]))
+  neg=predict[i][0]+log(float(cl[0])/(cl[0]+cl[1]))
+  pos=predict[i][1]+log(float(cl[1])/(cl[0]+cl[1]))
   cls=0
   if pos>neg: cls=1
   if cls==artcl[i]: 
@@ -93,8 +94,8 @@ tp=0
 fpos=0
 fneg=0
 for i in range(index):
-  neg=1+predict[i][0]+log(cl[0]/(cl[0]+cl[1]))
-  pos=10+predict[i][1]+log(cl[1]/(cl[0]+cl[1]))
+  neg=predict[i][0]+log(float(cl[0])/(cl[0]+cl[1]))
+  pos=log(10)+predict[i][1]+log(float(cl[1])/(cl[0]+cl[1]))
   cls=0
   if pos>neg: cls=1
   if cls==artcl[i]: 
